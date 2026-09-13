@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin | Thornwood Tattoo Co.</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2716%27 fill=%27%231a1a1a%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2758%27 text-anchor=%27middle%27 fill=%27%23fff%27 font-family=%27sans-serif%27%3ES%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- ================================================================ LOGIN -->
+  <section id="login-section" role="main" class="section" style="min-height:100vh;display:flex;align-items:center">
+    <div class="container" style="max-width:420px">
+      <h1>Studio Admin</h1>
+      <p class="muted">Log in to manage your site.</p>
+      <div id="login-alert" class="alert alert-error" hidden role="alert"></div>
+      <form id="login-form" novalidate>
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" name="email" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" name="password" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn btn-accent">Log in</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============================================================ DASHBOARD -->
+  <div id="dashboard-section" hidden>
+    <header class="site-header">
+      <div class="container">
+        <span class="brand">Studio Admin</span>
+        <button id="logout-btn" type="button" class="btn btn-outline">Log out</button>
+      </div>
+    </header>
+
+    <main id="main-content" class="container" style="padding-block:1.5rem">
+      <div role="tablist" aria-label="Admin sections" class="chip-row" style="margin-bottom:1.5rem">
+        <button role="tab" id="tab-btn-gallery" aria-controls="tab-panel-gallery" aria-selected="true" class="chip" type="button">Gallery</button>
+        <button role="tab" id="tab-btn-artists" aria-controls="tab-panel-artists" aria-selected="false" tabindex="-1" class="chip" type="button">Artists</button>
+        <button role="tab" id="tab-btn-services" aria-controls="tab-panel-services" aria-selected="false" tabindex="-1" class="chip" type="button">Services</button>
+        <button role="tab" id="tab-btn-hours" aria-controls="tab-panel-hours" aria-selected="false" tabindex="-1" class="chip" type="button">Hours</button>
+        <button role="tab" id="tab-btn-inquiries" aria-controls="tab-panel-inquiries" aria-selected="false" tabindex="-1" class="chip" type="button">Booking requests</button>
+        <button role="tab" id="tab-btn-settings" aria-controls="tab-panel-settings" aria-selected="false" tabindex="-1" class="chip" type="button">Site settings</button>
+      </div>
+
+      <!-- ---------------------------------------------------------- GALLERY -->
+      <section id="tab-panel-gallery" role="tabpanel" aria-labelledby="tab-btn-gallery">
+        <h2>Gallery</h2>
+        <p class="muted">Drag images in to add them, or click to browse. You can add a caption, tags, and assign an artist afterward.</p>
+
+        <div id="gallery-dropzone" class="dropzone" tabindex="0" role="button">
+          <p>Drag images here, or click to browse</p>
+          <p class="hint">JPG, PNG, WEBP, or GIF. 5MB max per image.</p>
+        </div>
+        <input type="file" id="gallery-dropzone-input" aria-label="Choose images to upload" accept="image/jpeg,image/png,image/webp,image/gif" multiple class="visually-hidden" tabindex="-1">
+        <p id="gallery-upload-progress" class="loading-note" hidden></p>
+        <div id="gallery-upload-status" class="alert" hidden role="alert"></div>
+
+        <form id="gallery-edit-form" hidden style="border:1px solid var(--color-border);border-radius:var(--radius);padding:1rem;margin:1.5rem 0">
+          <h3>Edit image</h3>
+          <img id="gallery-edit-preview" alt="Selected image preview" hidden style="max-height:200px;border-radius:var(--radius);margin-bottom:1rem">
+          <div id="gallery-edit-status" class="alert" hidden role="alert"></div>
+          <div class="field">
+            <label for="gallery-replacement-image">Replace image <span class="hint" style="display:inline">(optional)</span></label>
+            <input type="file" id="gallery-replacement-image" name="replacement_image" accept="image/jpeg,image/png,image/webp,image/gif">
+          </div>
+          <div class="field">
+            <label for="gallery-caption">Caption</label>
+            <input type="text" id="gallery-caption" name="caption" placeholder="e.g. Fineline botanical, forearm">
+          </div>
+          <div class="field">
+            <label for="gallery-style-tags">Style tags <span class="hint" style="display:inline">(comma separated)</span></label>
+            <input type="text" id="gallery-style-tags" name="style_tags" placeholder="e.g. Fineline, Botanical">
+          </div>
+          <div class="field">
+            <label for="gallery-artist-select">Artist</label>
+            <select id="gallery-artist-select" name="artist_id"></select>
+          </div>
+          <div class="field" style="display:flex;gap:1.5rem">
+            <label class="toggle-field"><input type="checkbox" id="gallery-is-healed" name="is_healed"> Healed work</label>
+            <label class="toggle-field"><input type="checkbox" id="gallery-is-featured" name="is_featured"> Featured on homepage</label>
+          </div>
+          <div style="display:flex;gap:0.6rem">
+            <button type="submit" class="btn btn-accent">Save changes</button>
+            <button type="button" id="gallery-edit-cancel" class="btn btn-outline">Cancel</button>
+          </div>
+        </form>
+
+        <h3 style="margin-top:2rem">All images</h3>
+        <div id="gallery-list-status" class="alert" hidden role="alert"></div>
+        <div id="gallery-admin-list"></div>
+      </section>
+
+      <!-- ---------------------------------------------------------- ARTISTS -->
+      <section id="tab-panel-artists" role="tabpanel" aria-labelledby="tab-btn-artists" hidden>
+        <h2>Artists</h2>
+        <form id="artist-form" novalidate style="border:1px solid var(--color-border);border-radius:var(--radius);padding:1rem;margin-bottom:1.5rem">
+          <div id="artist-form-status" class="alert" hidden role="alert"></div>
+          <img id="artist-photo-preview" alt="Selected photo preview" hidden style="max-height:200px;border-radius:var(--radius);margin-bottom:1rem">
+          <div class="field">
+            <label for="artist-photo">Photo</label>
+            <input type="file" id="artist-photo" name="photo" accept="image/jpeg,image/png,image/webp,image/gif">
+          </div>
+          <div class="field">
+            <label for="artist-name">Name</label>
+            <input type="text" id="artist-name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="artist-slug">Page name <span class="hint" style="display:inline">(used in their web address — letters, numbers, and dashes only)</span></label>
+            <input type="text" id="artist-slug" name="slug" required>
+          </div>
+          <div class="field">
+            <label for="artist-bio">Bio</label>
+            <textarea id="artist-bio" name="bio"></textarea>
+          </div>
+          <div class="field">
+            <label for="artist-specialties">Specialties <span class="hint" style="display:inline">(comma separated)</span></label>
+            <input type="text" id="artist-specialties" name="specialties" placeholder="e.g. Blackwork, Fineline">
+          </div>
+          <div class="field">
+            <label for="artist-instagram">Instagram handle <span class="hint" style="display:inline">(optional)</span></label>
+            <input type="text" id="artist-instagram" name="instagram_handle" placeholder="e.g. jordan.ink">
+          </div>
+          <div class="field">
+            <label for="artist-booking-status">Booking status</label>
+            <select id="artist-booking-status" name="booking_status">
+              <option value="open">Open for bookings</option>
+              <option value="waitlist">Waitlist only</option>
+              <option value="closed">Not booking right now</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:0.6rem">
+            <button type="submit" id="artist-submit-btn" class="btn btn-accent">Add artist</button>
+            <button type="button" id="artist-cancel-btn" class="btn btn-outline" hidden>Cancel</button>
+          </div>
+        </form>
+
+        <h3>All artists</h3>
+        <div id="artists-list-status" class="alert" hidden role="alert"></div>
+        <div id="artists-admin-list"></div>
+      </section>
+
+      <!-- --------------------------------------------------------- SERVICES -->
+      <section id="tab-panel-services" role="tabpanel" aria-labelledby="tab-btn-services" hidden>
+        <h2>Services</h2>
+        <form id="service-form" novalidate style="border:1px solid var(--color-border);border-radius:var(--radius);padding:1rem;margin-bottom:1.5rem">
+          <div id="service-form-status" class="alert" hidden role="alert"></div>
+          <div class="field">
+            <label for="service-title">Service name</label>
+            <input type="text" id="service-title" name="title" required>
+          </div>
+          <div class="field">
+            <label for="service-description">Description <span class="hint" style="display:inline">(optional)</span></label>
+            <textarea id="service-description" name="description"></textarea>
+          </div>
+          <div class="field">
+            <label for="service-price">Price <span class="hint" style="display:inline">(shown exactly as typed, e.g. "from $150")</span></label>
+            <input type="text" id="service-price" name="price_display" placeholder="e.g. from $150">
+          </div>
+          <div style="display:flex;gap:0.6rem">
+            <button type="submit" id="service-submit-btn" class="btn btn-accent">Add service</button>
+            <button type="button" id="service-cancel-btn" class="btn btn-outline" hidden>Cancel</button>
+          </div>
+        </form>
+
+        <h3>All services</h3>
+        <div id="services-list-status" class="alert" hidden role="alert"></div>
+        <div id="services-admin-list"></div>
+      </section>
+
+      <!-- ------------------------------------------------------------ HOURS -->
+      <section id="tab-panel-hours" role="tabpanel" aria-labelledby="tab-btn-hours" hidden>
+        <h2>Hours</h2>
+        <p class="muted">Set your hours for each day. Changes save one day at a time.</p>
+        <div id="hours-list-status" class="alert" hidden role="alert"></div>
+        <div id="hours-admin-list"></div>
+      </section>
+
+      <!-- -------------------------------------------------------- INQUIRIES -->
+      <section id="tab-panel-inquiries" role="tabpanel" aria-labelledby="tab-btn-inquiries" hidden>
+        <h2>Booking requests</h2>
+        <p class="muted">Update a request's status as you follow up, or delete ones you no longer need.</p>
+        <div id="inquiries-list-status" class="alert" hidden role="alert"></div>
+        <div id="inquiries-admin-list"></div>
+      </section>
+
+      <!-- --------------------------------------------------------- SETTINGS -->
+      <section id="tab-panel-settings" role="tabpanel" aria-labelledby="tab-btn-settings" hidden>
+        <h2>Site settings</h2>
+        <p class="muted">These control your whole public site — business info, contact details, colors, and fonts.</p>
+        <form id="settings-form" novalidate style="max-width:520px">
+          <div id="settings-form-status" class="alert" hidden role="alert"></div>
+
+          <div class="field">
+            <label for="settings-business-name">Business name</label>
+            <input type="text" id="settings-business-name" name="business_name" required>
+          </div>
+          <div class="field">
+            <label for="settings-tagline">Tagline</label>
+            <input type="text" id="settings-tagline" name="tagline">
+          </div>
+          <div class="field">
+            <label for="settings-about">About</label>
+            <textarea id="settings-about" name="about"></textarea>
+          </div>
+          <div class="field">
+            <label for="settings-address">Address</label>
+            <input type="text" id="settings-address" name="address">
+          </div>
+          <div class="field">
+            <label for="settings-phone">Phone</label>
+            <input type="tel" id="settings-phone" name="phone">
+          </div>
+          <div class="field">
+            <label for="settings-email">Email</label>
+            <input type="email" id="settings-email" name="email">
+          </div>
+          <div class="field">
+            <label for="settings-instagram">Instagram handle</label>
+            <input type="text" id="settings-instagram" name="instagram" placeholder="e.g. yourstudio">
+          </div>
+
+          <fieldset>
+            <legend>Colors</legend>
+            <div class="field">
+              <label for="settings-primary-color">Primary color <span class="hint" style="display:inline">(header, footer, dark sections)</span></label>
+              <input type="color" id="settings-primary-color" name="primary_color">
+            </div>
+            <div class="field">
+              <label for="settings-accent-color">Accent color <span class="hint" style="display:inline">(buttons, links)</span></label>
+              <input type="color" id="settings-accent-color" name="accent_color">
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Fonts</legend>
+            <p class="hint">Type the exact name of a Google Font, e.g. "Playfair Display". Leave blank to use the default.</p>
+            <div class="field">
+              <label for="settings-font-heading">Heading font</label>
+              <input type="text" id="settings-font-heading" name="font_heading">
+            </div>
+            <div class="field">
+              <label for="settings-font-body">Body font</label>
+              <input type="text" id="settings-font-body" name="font_body">
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="settings-logo">Logo</label>
+            <img id="settings-logo-preview" alt="Selected logo preview" hidden style="max-height:100px;border-radius:var(--radius);margin-bottom:0.75rem;display:block">
+            <input type="file" id="settings-logo" name="logo" accept="image/jpeg,image/png,image/webp,image/gif">
+          </div>
+
+          <button type="submit" class="btn btn-accent">Save settings</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="assets/js/dom-utils.js" defer></script>
+  <script src="assets/js/validation.js" defer></script>
+  <script src="assets/js/supabase-client.js" defer></script>
+  <script src="assets/js/storage-helpers.js" defer></script>
+  <script src="assets/js/cards.js" defer></script>
+  <script src="assets/js/admin-common.js" defer></script>
+  <script src="assets/js/admin-auth.js" defer></script>
+  <script src="assets/js/admin-gallery.js" defer></script>
+  <script src="assets/js/admin-artists.js" defer></script>
+  <script src="assets/js/admin-services.js" defer></script>
+  <script src="assets/js/admin-hours.js" defer></script>
+  <script src="assets/js/admin-inquiries.js" defer></script>
+  <script src="assets/js/admin-settings.js" defer></script>
+</body>
+</html>

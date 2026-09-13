@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gallery | Thornwood Tattoo Co.</title>
+  <meta name="description" content="Browse our tattoo gallery by style.">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2716%27 fill=%27%231a1a1a%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2758%27 text-anchor=%27middle%27 fill=%27%23fff%27 font-family=%27sans-serif%27%3ES%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <img data-config-logo alt="" hidden>
+        <span data-config-text="business_name">Studio</span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" type="button">Menu</button>
+      <ul id="primary-nav" class="primary-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="artists.html">Artists</a></li>
+        <li><a href="gallery.html" aria-current="page">Gallery</a></li>
+        <li><a href="book.html" class="btn btn-accent">Book Now</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h1>Gallery</h1>
+          <p>Filter by style, or toggle to see healed work.</p>
+        </div>
+
+        <div id="gallery-status" class="alert alert-error" hidden role="alert"></div>
+
+        <div id="tag-filters" class="chip-row" role="group" aria-label="Filter by style" hidden></div>
+        <label class="toggle-field" style="margin-bottom:1.5rem">
+          <input type="checkbox" id="healed-toggle">
+          Show healed work only
+        </label>
+
+        <p id="gallery-loading" class="visually-hidden" aria-live="polite">Loading gallery…</p>
+        <div id="gallery-grid" class="grid grid-3" aria-busy="true">
+          <div class="card skeleton-card" aria-hidden="true">
+            <div class="card-media skeleton-block"></div>
+            <div class="card-body">
+              <div class="skeleton-line medium"></div>
+              <div class="skeleton-line short"></div>
+              <div class="skeleton-line long"></div>
+            </div>
+          </div>
+          <div class="card skeleton-card" aria-hidden="true">
+            <div class="card-media skeleton-block"></div>
+            <div class="card-body">
+              <div class="skeleton-line medium"></div>
+              <div class="skeleton-line short"></div>
+              <div class="skeleton-line long"></div>
+            </div>
+          </div>
+          <div class="card skeleton-card" aria-hidden="true">
+            <div class="card-media skeleton-block"></div>
+            <div class="card-body">
+              <div class="skeleton-line medium"></div>
+              <div class="skeleton-line short"></div>
+              <div class="skeleton-line long"></div>
+            </div>
+          </div>
+          <div class="card skeleton-card" aria-hidden="true">
+            <div class="card-media skeleton-block"></div>
+            <div class="card-body">
+              <div class="skeleton-line medium"></div>
+              <div class="skeleton-line short"></div>
+              <div class="skeleton-line long"></div>
+            </div>
+          </div>
+          <div class="card skeleton-card" aria-hidden="true">
+            <div class="card-media skeleton-block"></div>
+            <div class="card-body">
+              <div class="skeleton-line medium"></div>
+              <div class="skeleton-line short"></div>
+              <div class="skeleton-line long"></div>
+            </div>
+          </div>
+          <div class="card skeleton-card" aria-hidden="true">
+            <div class="card-media skeleton-block"></div>
+            <div class="card-body">
+              <div class="skeleton-line medium"></div>
+              <div class="skeleton-line short"></div>
+              <div class="skeleton-line long"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="lightbox" class="lightbox-dialog" aria-label="Enlarged artwork">
+    <div class="lightbox-body">
+      <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+      <img src="" alt="">
+      <div class="lightbox-caption"></div>
+    </div>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="container">
+      <h2 class="visually-hidden">Get in touch</h2>
+      <div class="footer-grid">
+        <div>
+          <h3>Visit</h3>
+          <p data-config-text="address"></p>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p><a data-config-href="phone"></a></p>
+          <p><a data-config-href="email"></a></p>
+          <p><a data-config-href="instagram" target="_blank" rel="noopener noreferrer"></a></p>
+        </div>
+        <div>
+          <h3>Book</h3>
+          <p><a href="book.html" class="btn btn-accent">Book a consultation</a></p>
+        </div>
+      </div>
+      <p class="footer-bottom">&copy; <span id="footer-year"></span> <span data-config-text="business_name">Studio</span></p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="assets/js/dom-utils.js" defer></script>
+  <script src="assets/js/validation.js" defer></script>
+  <script src="assets/js/supabase-client.js" defer></script>
+  <script src="assets/js/site-config.js" defer></script>
+  <script src="assets/js/cards.js" defer></script>
+  <script src="assets/js/nav.js" defer></script>
+  <script src="assets/js/gallery.js" defer></script>
+  <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
