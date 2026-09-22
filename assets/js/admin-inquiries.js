@@ -47,7 +47,15 @@ function renderInquiriesAdminList() {
     return;
   }
   inquiriesAdminState.items.forEach((inquiry) => {
-    const refImage = sanitizeUrl(inquiry.reference_image_url);
+    const hasRefImage = !!inquiry.reference_image_url;
+    const refImg = hasRefImage ? el('img', { alt: `Reference image from ${inquiry.name}` }) : null;
+    const refLink = refImg ? el('a', { target: '_blank', rel: 'noopener noreferrer' }, [refImg]) : null;
+    const refBox = refLink ? el('div', { className: 'admin-row-media' }, [refLink]) : null;
+    if (refBox) {
+      getInquiryImageUrl(inquiry.reference_image_url).then((url) => {
+        if (url) { refLink.href = url; refImg.src = url; } else { refBox.remove(); }
+      }).catch(() => refBox.remove());
+    }
     const statusId = `inquiry-status-${inquiry.id}`;
     const select = el('select', { 'aria-label': `Status for ${inquiry.name}` },
       Object.entries(STATUS_LABELS).map(([value, label]) => el('option', { value, text: label })));
@@ -55,11 +63,7 @@ function renderInquiriesAdminList() {
     select.addEventListener('change', () => updateInquiryStatus(inquiry, select.value, statusId));
 
     const row = el('div', { className: 'admin-row' }, [
-      refImage ? el('div', { className: 'admin-row-media' }, [
-        el('a', { href: refImage, target: '_blank', rel: 'noopener noreferrer' }, [
-          el('img', { src: refImage, alt: `Reference image from ${inquiry.name}` }),
-        ]),
-      ]) : null,
+      refBox,
       el('div', { className: 'admin-row-body' }, [
         el('strong', { text: inquiry.name }),
         el('p', { className: 'muted', text: `${inquiry.email}${inquiry.phone ? ' · ' + inquiry.phone : ''}` }),
@@ -115,7 +119,7 @@ async function deleteInquiry(inquiry) {
     let cleanupWarning = '';
     if (inquiry.reference_image_url) {
       try {
-        await deleteMediaFile(inquiry.reference_image_url);
+        await deleteInquiryImage(inquiry.reference_image_url);
       } catch (cleanupErr) {
         console.error('Reference image cleanup failed:', cleanupErr);
         cleanupWarning = ' The attached image could not be removed from storage.';

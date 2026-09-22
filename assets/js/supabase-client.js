@@ -11,6 +11,7 @@
 const SUPABASE_URL = 'https://bhpfrrksglqxmmtvokpb.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_YMwOsq4gUwZX_q4K9U0low_budJsGN3';
 const MEDIA_BUCKET = 'media';
+const INQUIRY_BUCKET = 'inquiry-uploads'; // private bucket for customer reference photos
 
 const _createClient = (window.supabase && window.supabase.createClient)
   ? window.supabase.createClient
