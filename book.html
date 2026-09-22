@@ -83,6 +83,11 @@
             <img id="reference_image_preview" alt="Selected reference image preview" hidden style="margin-top:0.75rem;max-height:220px;border-radius:var(--radius)">
           </div>
 
+          <div class="hp-field" aria-hidden="true">
+            <label for="website">Leave this field empty</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
           <button type="submit" class="btn btn-accent">Send request</button>
         </form>
       </div>
@@ -112,7 +117,7 @@
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0" defer></script>
   <script src="assets/js/dom-utils.js" defer></script>
   <script src="assets/js/validation.js" defer></script>
   <script src="assets/js/supabase-client.js" defer></script>

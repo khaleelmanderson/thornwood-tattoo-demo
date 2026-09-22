@@ -4,6 +4,8 @@
 // from assets/js/validation.js that the admin panel's gallery upload
 // uses (Checkpoint 3) — same file, same rules, so they can't drift.
 
+const PAGE_LOADED_AT = Date.now();
+
 document.addEventListener('DOMContentLoaded', async () => {
   await loadSiteConfig();
   prefillPreferredArtist();
@@ -127,6 +129,14 @@ async function submitBooking(form) {
   clearAllFieldErrors(form);
   if (alertBox) { alertBox.hidden = true; }
 
+  // Spam trap: real people never fill the hidden 'website' field. Bots that do get a
+  // normal-looking success message and nothing is saved, so they learn nothing.
+  const honeypot = form.elements['website'];
+  if (honeypot && honeypot.value) {
+    showFakeSuccess(form, alertBox);
+    return;
+  }
+
   const errors = validateBookingForm(form);
   if (Object.keys(errors).length) {
     Object.entries(errors).forEach(([name, message]) => setFieldError(name, message));
@@ -137,6 +147,12 @@ async function submitBooking(form) {
       alertBox.className = 'alert alert-error';
       alertBox.textContent = 'Please fix the highlighted fields and try again.';
     }
+    return;
+  }
+
+  // Second trap: humans need more than a few seconds to fill this form.
+  if (Date.now() - PAGE_LOADED_AT < 3000) {
+    showFakeSuccess(form, alertBox);
     return;
   }
 
@@ -152,7 +168,7 @@ async function submitBooking(form) {
     const fileInput = form.elements['reference_image'];
     const file = fileInput && fileInput.files && fileInput.files[0];
     if (file) {
-      referenceImageUrl = await uploadMediaFile(file, 'inquiries');
+      referenceImageUrl = await uploadInquiryImage(file);
     }
 
     const payload = {
@@ -183,10 +199,19 @@ async function submitBooking(form) {
     if (alertBox) {
       alertBox.hidden = false;
       alertBox.className = 'alert alert-error';
-      alertBox.textContent = err.message || "Something went wrong sending your request. Please try again, or reach out to us directly.";
+      alertBox.textContent = "Something went wrong sending your request. Please try again, or reach out to us directly.";
       alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   } finally {
     if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalLabel; }
+  }
+}
+
+function showFakeSuccess(form, alertBox) {
+  form.reset();
+  if (alertBox) {
+    alertBox.hidden = false;
+    alertBox.className = 'alert alert-success';
+    alertBox.textContent = "Thanks! Your request has been sent, and we will get back to you soon.";
   }
 }

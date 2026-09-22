@@ -40,3 +40,49 @@ async function deleteMediaFile(url) {
   if (error) throw error;
   return true;
 }
+
+/**
+ * Upload a customer's reference photo to the PRIVATE inquiry bucket.
+ * Returns the storage path (not a public URL). Only signed-in admins can read it.
+ * @param {File} file
+ * @returns {Promise<string>} the object path inside INQUIRY_BUCKET
+ */
+async function uploadInquiryImage(file) {
+  const validationError = validateImageFile(file);
+  if (validationError) throw new Error(validationError);
+  const client = requireSupabaseClient();
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '');
+  const path = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}_${safeName}`;
+  const { error } = await client.storage.from(INQUIRY_BUCKET).upload(path, file);
+  if (error) throw error;
+  return path;
+}
+
+/** True when a stored reference_image_url is a private-bucket path (not an http URL). */
+function isPrivateInquiryPath(value) {
+  return typeof value === 'string' && value.length > 0 && !/^https?:\/\//i.test(value);
+}
+
+/**
+ * Resolve a stored reference image value to a displayable URL.
+ * Older rows hold a public URL; new rows hold a private path and need a signed URL.
+ * @returns {Promise<string|null>}
+ */
+async function getInquiryImageUrl(value) {
+  if (!isPrivateInquiryPath(value)) return sanitizeUrl(value);
+  const client = requireSupabaseClient();
+  const { data, error } = await client.storage.from(INQUIRY_BUCKET).createSignedUrl(value, 3600);
+  if (error || !data) return null;
+  return sanitizeUrl(data.signedUrl);
+}
+
+/** Delete the file behind a stored reference_image_url (private path or legacy public URL). */
+async function deleteInquiryImage(value) {
+  if (isPrivateInquiryPath(value)) {
+    const client = requireSupabaseClient();
+    const { error } = await client.storage.from(INQUIRY_BUCKET).remove([value]);
+    if (error) throw error;
+    return true;
+  }
+  return deleteMediaFile(value);
+}

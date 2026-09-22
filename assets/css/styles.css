@@ -488,3 +488,6 @@ legend { font-weight: 700; padding: 0 0.4rem; }
 .admin-row-body p { margin: 0.2rem 0; }
 .admin-row-actions { display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start; }
 .admin-row-hours .admin-row-body input[type="text"] { margin-top: 0.5rem; }
+
+/* Honeypot field for the booking form: hidden from people, visible to naive bots. */
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
