@@ -18,6 +18,7 @@ const SITE_CONFIG_DEFAULTS = {
   accent_color: '#b3231c',
   font_heading: '',
   font_body: '',
+  theme_base: 'light',
 };
 
 /** WCAG relative luminance -> pick readable text color for a background. */
@@ -55,6 +56,12 @@ function loadGoogleFont(familyName) {
 
 function applyTheme(config) {
   const root = document.documentElement;
+  // Per-client brand choice stored in the database, not the visitor's OS
+  // setting — a plain attribute the dark token block in styles.css
+  // selects on ([data-theme="dark"]), never prefers-color-scheme.
+  // Defaults to light if the field is missing (older/unmigrated rows).
+  root.setAttribute('data-theme', config.theme_base === 'dark' ? 'dark' : 'light');
+
   const primary = isValidHexColor(config.primary_color) ? config.primary_color : SITE_CONFIG_DEFAULTS.primary_color;
   const accent = isValidHexColor(config.accent_color) ? config.accent_color : SITE_CONFIG_DEFAULTS.accent_color;
   root.style.setProperty('--color-primary', primary);
