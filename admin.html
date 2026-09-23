@@ -228,28 +228,52 @@
           </div>
 
           <fieldset>
-            <legend>Colors</legend>
-            <div class="field">
-              <label for="settings-primary-color">Primary color <span class="hint" style="display:inline">(header, footer, dark sections)</span></label>
-              <input type="color" id="settings-primary-color" name="primary_color">
-            </div>
-            <div class="field">
-              <label for="settings-accent-color">Accent color <span class="hint" style="display:inline">(buttons, links)</span></label>
-              <input type="color" id="settings-accent-color" name="accent_color">
-            </div>
-          </fieldset>
+            <legend>Theme</legend>
+            <p class="hint">Pick a starting palette below, or open Custom to set colors and fonts yourself. Either way, your whole public site updates from here — no code changes.</p>
 
-          <fieldset>
-            <legend>Fonts</legend>
-            <p class="hint">Type the exact name of a Google Font, e.g. "Playfair Display". Leave blank to use the default.</p>
+            <div id="palette-presets" class="palette-grid" role="group" aria-label="Palette presets"></div>
+
             <div class="field">
-              <label for="settings-font-heading">Heading font</label>
-              <input type="text" id="settings-font-heading" name="font_heading">
+              <span class="hint" style="display:block;margin-bottom:0.4rem">Page background</span>
+              <div id="theme-base-toggle" class="segmented" role="group" aria-label="Page background: light or dark">
+                <button type="button" class="segmented-btn" data-theme-base="light" aria-pressed="true">Light</button>
+                <button type="button" class="segmented-btn" data-theme-base="dark" aria-pressed="false">Dark</button>
+              </div>
+              <p class="hint">Your site's overall background and text color — separate from the accent colors below. A preset suggests one, but you can flip it either way.</p>
             </div>
-            <div class="field">
-              <label for="settings-font-body">Body font</label>
-              <input type="text" id="settings-font-body" name="font_body">
+            <input type="hidden" id="settings-theme-base" name="theme_base" value="light">
+            <input type="hidden" id="settings-palette-id" name="palette_id" value="">
+
+            <div id="theme-preview" class="theme-preview" aria-hidden="true">
+              <div class="theme-preview-header">
+                <span>Your Studio</span>
+              </div>
+              <div class="theme-preview-body">
+                <p>This is what your public pages will look like.</p>
+                <span class="theme-preview-btn">Book a consultation</span>
+              </div>
             </div>
+
+            <details id="custom-theme-details" style="margin-top:1.25rem">
+              <summary>Custom colors &amp; fonts</summary>
+              <div class="field" style="margin-top:1rem">
+                <label for="settings-primary-color">Primary color <span class="hint" style="display:inline">(header, footer, dark sections)</span></label>
+                <input type="color" id="settings-primary-color" name="primary_color">
+              </div>
+              <div class="field">
+                <label for="settings-accent-color">Accent color <span class="hint" style="display:inline">(buttons, links)</span></label>
+                <input type="color" id="settings-accent-color" name="accent_color">
+              </div>
+              <p class="hint">Type the exact name of a Google Font, e.g. "Playfair Display". Leave blank to use the default.</p>
+              <div class="field">
+                <label for="settings-font-heading">Heading font</label>
+                <input type="text" id="settings-font-heading" name="font_heading">
+              </div>
+              <div class="field">
+                <label for="settings-font-body">Body font</label>
+                <input type="text" id="settings-font-body" name="font_body">
+              </div>
+            </details>
           </fieldset>
 
           <div class="field">
