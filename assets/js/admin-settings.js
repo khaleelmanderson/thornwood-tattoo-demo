@@ -164,28 +164,24 @@ function setThemeBase(base) {
 // looks.
 // ---------------------------------------------------------------------
 
-const PREVIEW_DARK_TOKENS = {
-  '--color-bg': '#121212',
-  '--color-text': '#ECECEC',
-};
-const PREVIEW_LIGHT_TOKENS = {
-  '--color-bg': '#ffffff',
-  '--color-text': '#1c1c1c',
-};
-
 function updateThemePreview() {
   const preview = document.getElementById('theme-preview');
   const form = document.getElementById('settings-form');
   if (!preview || !form) return;
 
-  const base = form.elements['theme_base'].value === 'dark' ? PREVIEW_DARK_TOKENS : PREVIEW_LIGHT_TOKENS;
+  // Reuse the SAME [data-theme="dark"] neutral token block
+  // (styles.css) the real public pages use, scoped to just this
+  // element instead of <html> — not a hand-maintained second copy of
+  // the bg/text values, which drifted out of sync with the real dark
+  // palette and left this preview's body text unreadable against its
+  // own dark background.
+  preview.setAttribute('data-theme', form.elements['theme_base'].value === 'dark' ? 'dark' : 'light');
+
   const primary = /^#[0-9a-f]{6}$/i.test(form.elements['primary_color'].value) ? form.elements['primary_color'].value : '#1a1a1a';
   const accent = /^#[0-9a-f]{6}$/i.test(form.elements['accent_color'].value) ? form.elements['accent_color'].value : '#b3231c';
   const fontHeading = form.elements['font_heading'].value.trim();
   const fontBody = form.elements['font_body'].value.trim();
 
-  preview.style.setProperty('--color-bg', base['--color-bg']);
-  preview.style.setProperty('--color-text', base['--color-text']);
   preview.style.setProperty('--color-primary', primary);
   preview.style.setProperty('--color-primary-contrast', previewContrastColor(primary));
   preview.style.setProperty('--color-accent', accent);

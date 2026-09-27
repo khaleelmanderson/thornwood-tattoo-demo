@@ -65,6 +65,12 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* The img rule below sets display:block unconditionally, which beats
+ * the browser's own default [hidden] handling — without this, a hidden
+ * <img> (e.g. book.html's empty reference_image_preview before a file
+ * is chosen) shows up as a broken-image icon instead of staying hidden. */
+[hidden] { display: none !important; }
+
 html { -webkit-text-size-adjust: 100%; }
 
 body {
@@ -151,6 +157,7 @@ a:hover { text-decoration: none; }
   align-items: center;
   gap: 0.4rem;
   background: none;
+  color: inherit;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   padding: 0.5rem 0.75rem;
@@ -576,10 +583,15 @@ legend { font-weight: 700; padding: 0 0.4rem; }
   color: var(--color-primary-contrast);
 }
 
-/* Live preview mockup: styled entirely from inline custom properties set
- * by admin-settings.js, scoped to this element — never the page's own
- * --color-*/--font-* tokens, so it can preview an unsaved choice without
- * the surrounding (always-light) admin page changing at all. */
+/* Live preview mockup. Its neutral bg/text/border/status tokens come
+ * from the SAME [data-theme="dark"] block above, applied to this
+ * element directly (admin-settings.js toggles this element's own
+ * data-theme attribute) rather than a second hand-maintained copy of
+ * those values — --color-primary/-accent and the fonts are set as
+ * inline custom properties instead, straight from the form fields.
+ * Either way, everything here is scoped to this one element, never the
+ * page's own tokens, so it can preview an unsaved choice without the
+ * surrounding (always-light) admin page changing at all. */
 .theme-preview {
   margin-top: 1rem;
   max-width: 320px;
