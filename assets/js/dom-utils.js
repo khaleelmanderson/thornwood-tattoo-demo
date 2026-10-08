@@ -101,3 +101,25 @@ function parseTagArray(value) {
   }
   return [];
 }
+
+/** Generic localStorage JSON cache helpers, wrapped in try/catch so
+ * private browsing or storage-disabled environments degrade silently —
+ * caching is purely a speed optimization, never required for
+ * correctness. Used for site_config and the home page's read-mostly
+ * public content (never for inquiries or anything admin-only). */
+function cacheRead(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  } catch (err) {
+    return null;
+  }
+}
+
+function cacheWrite(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (err) {
+    // ignore - private mode / quota exceeded, caching is optional
+  }
+}

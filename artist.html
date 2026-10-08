@@ -10,6 +10,39 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Artist | Thornwood Tattoo Co.</title>
+  <script>
+  // Apply the last successfully cached site_config synchronously, before
+  // first paint and before the stylesheet loads, so a repeat visit never
+  // flashes the baked-in/default colors while site-config.js re-fetches.
+  // Supabase stays the source of truth: loadSiteConfig() always re-fetches
+  // and overwrites this once the page's scripts run. Wrapped in try/catch
+  // so private browsing / storage-disabled environments degrade silently.
+  (function () {
+    try {
+      var cached = JSON.parse(localStorage.getItem('site_config_cache_v1'));
+      if (!cached) return;
+      var root = document.documentElement;
+      root.setAttribute('data-theme', cached.theme_base === 'dark' ? 'dark' : 'light');
+      var isHex = function (v) { return typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v.trim()); };
+      var contrast = function (hex) {
+        var m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec((hex || '').trim());
+        if (!m) return '#ffffff';
+        var rgb = [m[1], m[2], m[3]].map(function (h) { return parseInt(h, 16) / 255; });
+        var lin = function (c) { return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+        var l = 0.2126 * lin(rgb[0]) + 0.7152 * lin(rgb[1]) + 0.0722 * lin(rgb[2]);
+        return l > 0.35 ? '#111111' : '#ffffff';
+      };
+      if (isHex(cached.primary_color)) {
+        root.style.setProperty('--color-primary', cached.primary_color);
+        root.style.setProperty('--color-primary-contrast', contrast(cached.primary_color));
+      }
+      if (isHex(cached.accent_color)) {
+        root.style.setProperty('--color-accent', cached.accent_color);
+        root.style.setProperty('--color-accent-contrast', contrast(cached.accent_color));
+      }
+    } catch (err) {}
+  })();
+  </script>
   <link rel="stylesheet" href="assets/css/styles.css">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2716%27 fill=%27%231a1a1a%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2758%27 text-anchor=%27middle%27 fill=%27%23fff%27 font-family=%27sans-serif%27%3ES%3C/text%3E%3C/svg%3E">
 </head>

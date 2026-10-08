@@ -137,13 +137,28 @@ function sanitizeEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed) ? trimmed : null;
 }
 
-/** Fetch site_config (single row) and apply it. Always resolves — on
- * failure it applies the built-in defaults so the page still renders
- * with a working (if generic) theme rather than blank/broken, and
- * returns null so callers can show their own "couldn't load" notice
- * for content that truly depends on the network (not just theming). */
+const SITE_CONFIG_CACHE_KEY = 'site_config_cache_v1';
+
+/** Fetch site_config (single row) and apply it. A cached copy from the
+ * last successful load (if any) is applied immediately so repeat
+ * visits never show the generic defaults while the network request is
+ * in flight — see the inline pre-paint script in each page's <head>,
+ * which applies the same cache synchronously before first paint.
+ * Supabase remains the source of truth: a successful fetch always
+ * re-applies and re-caches. Always resolves — on failure it falls back
+ * to the cache if one exists, or the built-in defaults otherwise, so
+ * the page still renders with a working (if generic) theme rather than
+ * blank/broken, and returns null so callers can show their own
+ * "couldn't load" notice for content that truly depends on the network
+ * (not just theming). */
 async function loadSiteConfig() {
-  applyTheme(SITE_CONFIG_DEFAULTS);
+  const cached = cacheRead(SITE_CONFIG_CACHE_KEY);
+  if (cached) {
+    applyTheme(cached);
+    applyCopy(cached);
+  } else {
+    applyTheme(SITE_CONFIG_DEFAULTS);
+  }
   try {
     const client = requireSupabaseClient();
     const { data, error } = await client.from('site_config').select('*').single();
@@ -151,10 +166,11 @@ async function loadSiteConfig() {
     const config = data || {};
     applyTheme(config);
     applyCopy(config);
+    cacheWrite(SITE_CONFIG_CACHE_KEY, config);
     return config;
   } catch (err) {
     console.error('Unable to load site configuration:', err);
-    applyCopy(SITE_CONFIG_DEFAULTS);
+    if (!cached) applyCopy(SITE_CONFIG_DEFAULTS);
     return null;
   }
 }
