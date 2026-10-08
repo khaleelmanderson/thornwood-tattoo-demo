@@ -1,6 +1,9 @@
 // index.html page controller.
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadSiteConfig();
+document.addEventListener('DOMContentLoaded', () => {
+  // loadSiteConfig() and the page's data queries are independent — run
+  // them in parallel instead of waiting on config before starting data
+  // fetches that don't need it.
+  loadSiteConfig();
   loadFeaturedGallery();
   loadArtistsPreview();
   loadServices();

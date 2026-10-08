@@ -3,9 +3,11 @@
 
 const galleryState = { items: [], activeTags: new Set(), healedOnly: false };
 
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadSiteConfig();
-  await loadGalleryItems();
+document.addEventListener('DOMContentLoaded', () => {
+  // loadSiteConfig() and loadGalleryItems() are independent — run them in
+  // parallel instead of waiting on config before fetching gallery items.
+  loadSiteConfig();
+  loadGalleryItems();
   wireHealedToggle();
 });
 

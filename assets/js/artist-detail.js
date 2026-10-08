@@ -1,6 +1,8 @@
 // artist.html?slug=... page controller.
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadSiteConfig();
+document.addEventListener('DOMContentLoaded', () => {
+  // loadSiteConfig() and loadArtist() are independent — run them in
+  // parallel instead of waiting on config before fetching the artist.
+  loadSiteConfig();
   loadArtist();
 });
 
