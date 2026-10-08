@@ -11,11 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Stale-while-revalidate cache keys for the home page's read-mostly public
-// content. Never used for inquiries or anything admin-only.
-const FEATURED_GALLERY_CACHE_KEY = 'home_featured_gallery_cache_v1';
-const ARTISTS_PREVIEW_CACHE_KEY = 'home_artists_preview_cache_v1';
-const SERVICES_CACHE_KEY = 'home_services_cache_v1';
-const HOURS_CACHE_KEY = 'home_hours_cache_v1';
+// content, namespaced by this project's own Supabase ref (see
+// namespacedCacheKey() in supabase-client.js). Never used for inquiries
+// or anything admin-only.
+const FEATURED_GALLERY_CACHE_KEY = namespacedCacheKey('home_featured_gallery_cache_v1');
+const ARTISTS_PREVIEW_CACHE_KEY = namespacedCacheKey('home_artists_preview_cache_v1');
+const SERVICES_CACHE_KEY = namespacedCacheKey('home_services_cache_v1');
+const HOURS_CACHE_KEY = namespacedCacheKey('home_hours_cache_v1');
 
 async function loadFeaturedGallery() {
   const grid = document.getElementById('featured-gallery');

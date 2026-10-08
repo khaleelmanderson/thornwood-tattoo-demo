@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="light" style="--color-primary:#16213e;--color-primary-contrast:#ffffff;--color-accent:#d9a441;--color-accent-contrast:#111111">
+<html lang="en" data-theme="light" style="--color-primary:#16213e;--color-primary-contrast:#ffffff;--color-accent:#d9a441;--color-accent-contrast:#111111;--font-heading:'Fraunces', var(--font-fallback);--font-body:'Work Sans', var(--font-fallback)">
 <head>
   <!-- business_name/tagline/theme_base/primary_color/accent_color below are
        baked in from the current site_config row (read directly from
@@ -8,20 +8,28 @@
        Supabase stays the source of truth: loadSiteConfig() always
        re-fetches and overwrites these on load if the row has changed. -->
   <meta charset="utf-8">
-  <link rel="preconnect" href="https://bhpfrrksglqxmmtvokpb.supabase.co">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://bhpfrrksglqxmmtvokpb.supabase.co" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Artist | Thornwood Tattoo Co.</title>
+  <link id="gfont-fraunces" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&display=swap">
+  <link id="gfont-work-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&display=swap">
   <script>
   // Apply the last successfully cached site_config synchronously, before
   // first paint and before the stylesheet loads, so a repeat visit never
-  // flashes the baked-in/default colors while site-config.js re-fetches.
-  // Supabase stays the source of truth: loadSiteConfig() always re-fetches
-  // and overwrites this once the page's scripts run. Wrapped in try/catch
-  // so private browsing / storage-disabled environments degrade silently.
+  // flashes the baked-in/default colors or fonts while site-config.js
+  // re-fetches. The cache key is namespaced by this project's own
+  // Supabase ref, since every *.github.io "project site" under one
+  // GitHub username shares a single localStorage origin regardless of
+  // which repo/client it belongs to. Supabase stays the source of
+  // truth: loadSiteConfig() always re-fetches and overwrites this once
+  // the page's scripts run. Wrapped in try/catch so private browsing /
+  // storage-disabled environments degrade silently.
   (function () {
     try {
-      var cached = JSON.parse(localStorage.getItem('site_config_cache_v1'));
+      var cached = JSON.parse(localStorage.getItem('bhpfrrksglqxmmtvokpb:site_config_cache_v1'));
       if (!cached) return;
       var root = document.documentElement;
       root.setAttribute('data-theme', cached.theme_base === 'dark' ? 'dark' : 'light');
@@ -41,6 +49,27 @@
       if (isHex(cached.accent_color)) {
         root.style.setProperty('--color-accent', cached.accent_color);
         root.style.setProperty('--color-accent-contrast', contrast(cached.accent_color));
+      }
+      var ensureGoogleFont = function (familyName) {
+        if (!familyName) return;
+        var safeName = String(familyName).trim();
+        if (!safeName) return;
+        var linkId = 'gfont-' + safeName.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+        if (document.getElementById(linkId)) return;
+        var href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(safeName).replace(/%20/g, '+') + ':wght@400;600;700&display=swap';
+        var link = document.createElement('link');
+        link.id = linkId;
+        link.rel = 'stylesheet';
+        link.href = href;
+        document.head.appendChild(link);
+      };
+      if (cached.font_heading) {
+        root.style.setProperty('--font-heading', "'" + cached.font_heading + "', var(--font-fallback)");
+        ensureGoogleFont(cached.font_heading);
+      }
+      if (cached.font_body) {
+        root.style.setProperty('--font-body', "'" + cached.font_body + "', var(--font-fallback)");
+        ensureGoogleFont(cached.font_body);
       }
     } catch (err) {}
   })();
