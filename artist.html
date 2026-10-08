@@ -1,6 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light" style="--color-primary:#16213e;--color-primary-contrast:#ffffff;--color-accent:#d9a441;--color-accent-contrast:#111111">
 <head>
+  <!-- business_name/tagline/theme_base/primary_color/accent_color below are
+       baked in from the current site_config row (read directly from
+       Supabase, not guessed) so the page shows real content, theme and
+       colors even with JavaScript disabled or before site-config.js runs.
+       Supabase stays the source of truth: loadSiteConfig() always
+       re-fetches and overwrites these on load if the row has changed. -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Artist | Thornwood Tattoo Co.</title>
@@ -14,7 +20,7 @@
     <div class="container">
       <a class="brand" href="index.html">
         <img data-config-logo alt="" hidden>
-        <span data-config-text="business_name">Studio</span>
+        <span data-config-text="business_name">Thornwood Tattoo Co.</span>
       </a>
       <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" type="button">Menu</button>
       <ul id="primary-nav" class="primary-nav">
@@ -100,7 +106,7 @@
           <p><a href="book.html" class="btn btn-accent">Book a consultation</a></p>
         </div>
       </div>
-      <p class="footer-bottom">&copy; <span id="footer-year"></span> <span data-config-text="business_name">Studio</span></p>
+      <p class="footer-bottom">&copy; <span id="footer-year"></span> <span data-config-text="business_name">Thornwood Tattoo Co.</span></p>
     </div>
   </footer>
 
