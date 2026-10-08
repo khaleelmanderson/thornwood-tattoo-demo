@@ -152,7 +152,8 @@ const SITE_CONFIG_CACHE_KEY = 'site_config_cache_v1';
  * "couldn't load" notice for content that truly depends on the network
  * (not just theming). */
 async function loadSiteConfig() {
-  const cached = cacheRead(SITE_CONFIG_CACHE_KEY);
+  const cacheKey = namespacedCacheKey(SITE_CONFIG_CACHE_KEY);
+  const cached = cacheRead(cacheKey);
   if (cached) {
     applyTheme(cached);
     applyCopy(cached);
@@ -166,7 +167,7 @@ async function loadSiteConfig() {
     const config = data || {};
     applyTheme(config);
     applyCopy(config);
-    cacheWrite(SITE_CONFIG_CACHE_KEY, config);
+    cacheWrite(cacheKey, config);
     return config;
   } catch (err) {
     console.error('Unable to load site configuration:', err);

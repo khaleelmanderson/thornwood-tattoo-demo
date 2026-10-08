@@ -39,6 +39,22 @@ function requireSupabaseClient() {
   return supabaseClient;
 }
 
+/** Every *.github.io "project site" under one GitHub username shares a
+ * single localStorage origin, regardless of which repo/client it
+ * belongs to — so a cached site_config/gallery/etc. from one client's
+ * clone could otherwise leak into another's cache reads on the same
+ * account. Namespacing every cache key by this project's own Supabase
+ * ref (the same literal this site's inline pre-paint <head> script
+ * uses, since that script runs before this file loads and can't call
+ * this) keeps that from happening. */
+function namespacedCacheKey(key) {
+  try {
+    return `${new URL(SUPABASE_URL).hostname.split('.')[0]}:${key}`;
+  } catch (err) {
+    return key;
+  }
+}
+
 function getMediaPublicUrl(path) {
   const { data } = requireSupabaseClient().storage.from(MEDIA_BUCKET).getPublicUrl(path);
   return sanitizeUrl(data && data.publicUrl);
