@@ -30,12 +30,12 @@ function buildArtistCard(artist) {
     }),
   ]);
 
-  return el('article', { className: 'card' }, [media, body]);
+  return el('article', { className: 'card fade-in' }, [media, body]);
 }
 
 function buildGalleryTile(item, { onOpen } = {}) {
   const img = sanitizeUrl(item.image_url);
-  const tile = el('figure', { className: 'card', 'data-style-tags': parseTagArray(item.style_tags).join('|'), 'data-healed': item.is_healed ? '1' : '0' }, [
+  const tile = el('figure', { className: 'card fade-in', 'data-style-tags': parseTagArray(item.style_tags).join('|'), 'data-healed': item.is_healed ? '1' : '0' }, [
     el('div', { className: 'card-media' }, [
       img
         ? el('img', {
@@ -94,7 +94,7 @@ function renderSkeletonHours(container, count) {
 }
 
 function buildServiceRow(service) {
-  return el('div', { className: 'card' }, [
+  return el('div', { className: 'card fade-in' }, [
     el('div', { className: 'card-body' }, [
       el('h3', { text: service.title || 'Service' }),
       service.description ? el('p', { className: 'muted', text: service.description }) : null,
@@ -119,7 +119,7 @@ function buildHoursRow(hour) {
   const detail = hour.is_closed
     ? (hour.note || 'Closed')
     : (hour.open_time && hour.close_time ? `${formatTime(hour.open_time)} – ${formatTime(hour.close_time)}` : (hour.note || ''));
-  return el('li', {}, [
+  return el('li', { className: 'fade-in' }, [
     el('span', { style: 'font-weight:600', text: dayName }),
     el('span', { text: detail }),
   ]);

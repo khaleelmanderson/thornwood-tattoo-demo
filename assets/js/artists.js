@@ -18,7 +18,7 @@ async function loadArtists() {
     if (error) throw error;
     clearChildren(grid);
     if (!data || !data.length) {
-      grid.appendChild(el('p', { className: 'empty-note', text: 'No artist profiles yet — check back soon.' }));
+      grid.appendChild(el('p', { className: 'empty-note fade-in', text: 'No artist profiles yet — check back soon.' }));
       return;
     }
     data.forEach((artist) => grid.appendChild(buildArtistCard(artist)));

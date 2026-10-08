@@ -39,7 +39,7 @@ async function loadFeaturedGallery() {
     if (error) throw error;
     clearChildren(grid);
     if (!data || !data.length) {
-      grid.appendChild(el('p', { className: 'empty-note', text: 'Featured work is coming soon — check back shortly.' }));
+      grid.appendChild(el('p', { className: 'empty-note fade-in', text: 'Featured work is coming soon — check back shortly.' }));
       cacheWrite(FEATURED_GALLERY_CACHE_KEY, []);
       return;
     }
@@ -78,7 +78,7 @@ async function loadArtistsPreview() {
     if (error) throw error;
     clearChildren(grid);
     if (!data || !data.length) {
-      grid.appendChild(el('p', { className: 'empty-note', text: 'Artist profiles are coming soon.' }));
+      grid.appendChild(el('p', { className: 'empty-note fade-in', text: 'Artist profiles are coming soon.' }));
       cacheWrite(ARTISTS_PREVIEW_CACHE_KEY, []);
       return;
     }
@@ -113,7 +113,7 @@ async function loadServices() {
     if (error) throw error;
     clearChildren(list);
     if (!data || !data.length) {
-      list.appendChild(el('p', { className: 'empty-note', text: 'Service pricing is coming soon — message us to ask.' }));
+      list.appendChild(el('p', { className: 'empty-note fade-in', text: 'Service pricing is coming soon — message us to ask.' }));
       cacheWrite(SERVICES_CACHE_KEY, []);
       return;
     }
@@ -148,7 +148,7 @@ async function loadHours() {
     if (error) throw error;
     clearChildren(list);
     if (!data || !data.length) {
-      list.appendChild(el('li', { text: 'Hours coming soon — please call ahead.' }));
+      list.appendChild(el('li', { className: 'fade-in', text: 'Hours coming soon — please call ahead.' }));
       cacheWrite(HOURS_CACHE_KEY, []);
       return;
     }

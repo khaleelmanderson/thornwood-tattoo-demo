@@ -99,7 +99,7 @@ function renderGallery() {
 
   clearChildren(grid);
   if (!filtered.length) {
-    grid.appendChild(el('p', { className: 'empty-note', text: 'No pieces match those filters yet — try clearing one.' }));
+    grid.appendChild(el('p', { className: 'empty-note fade-in', text: 'No pieces match those filters yet — try clearing one.' }));
     return;
   }
   filtered.forEach((item) => grid.appendChild(buildGalleryTile(item, { onOpen: openLightbox })));
