@@ -1,6 +1,8 @@
 // artists.html page controller.
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadSiteConfig();
+document.addEventListener('DOMContentLoaded', () => {
+  // loadSiteConfig() and loadArtists() are independent — run them in
+  // parallel instead of waiting on config before fetching artists.
+  loadSiteConfig();
   loadArtists();
 });
 
@@ -16,7 +18,7 @@ async function loadArtists() {
     if (error) throw error;
     clearChildren(grid);
     if (!data || !data.length) {
-      grid.appendChild(el('p', { className: 'empty-note', text: 'No artist profiles yet — check back soon.' }));
+      grid.appendChild(el('p', { className: 'empty-note fade-in', text: 'No artist profiles yet — check back soon.' }));
       return;
     }
     data.forEach((artist) => grid.appendChild(buildArtistCard(artist)));

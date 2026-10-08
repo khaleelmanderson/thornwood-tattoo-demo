@@ -437,6 +437,15 @@ legend { font-weight: 700; padding: 0 0.4rem; }
   .skeleton-block, .skeleton-line { animation: none; }
 }
 
+/* ------------------------------------------------- real-content fade-in */
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.fade-in { animation: fade-in 150ms ease-in; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { animation: none; }
+}
+
 /* ---------------------------------------------------------------- footer */
 .site-footer {
   background: var(--color-primary);

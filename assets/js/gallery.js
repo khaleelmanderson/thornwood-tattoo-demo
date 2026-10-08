@@ -3,9 +3,11 @@
 
 const galleryState = { items: [], activeTags: new Set(), healedOnly: false };
 
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadSiteConfig();
-  await loadGalleryItems();
+document.addEventListener('DOMContentLoaded', () => {
+  // loadSiteConfig() and loadGalleryItems() are independent — run them in
+  // parallel instead of waiting on config before fetching gallery items.
+  loadSiteConfig();
+  loadGalleryItems();
   wireHealedToggle();
 });
 
@@ -97,7 +99,7 @@ function renderGallery() {
 
   clearChildren(grid);
   if (!filtered.length) {
-    grid.appendChild(el('p', { className: 'empty-note', text: 'No pieces match those filters yet — try clearing one.' }));
+    grid.appendChild(el('p', { className: 'empty-note fade-in', text: 'No pieces match those filters yet — try clearing one.' }));
     return;
   }
   filtered.forEach((item) => grid.appendChild(buildGalleryTile(item, { onOpen: openLightbox })));

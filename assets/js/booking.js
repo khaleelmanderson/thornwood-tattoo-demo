@@ -6,8 +6,10 @@
 
 const PAGE_LOADED_AT = Date.now();
 
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadSiteConfig();
+document.addEventListener('DOMContentLoaded', () => {
+  // loadSiteConfig() is independent of the rest of this page's setup —
+  // run it in parallel instead of waiting on it first.
+  loadSiteConfig();
   prefillPreferredArtist();
   wireImagePreview();
   wireForm();

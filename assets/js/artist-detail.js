@@ -1,6 +1,8 @@
 // artist.html?slug=... page controller.
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadSiteConfig();
+document.addEventListener('DOMContentLoaded', () => {
+  // loadSiteConfig() and loadArtist() are independent — run them in
+  // parallel instead of waiting on config before fetching the artist.
+  loadSiteConfig();
   loadArtist();
 });
 
@@ -32,9 +34,11 @@ async function loadArtist() {
     const specialties = parseTagArray(artist.specialties);
 
     clearChildren(root);
-    root.appendChild(el('div', { className: 'grid grid-2', style: 'align-items:start' }, [
+    root.appendChild(el('div', { className: 'grid grid-2 fade-in', style: 'align-items:start' }, [
       el('div', { className: 'card-media', style: 'border-radius:var(--radius);overflow:hidden' }, [
-        photo ? el('img', { src: photo, alt: `Portrait of ${artist.name || 'the artist'}`, loading: 'lazy' }) : null,
+        // This is the above-the-fold profile photo (the page's likely LCP
+        // element) — never lazy-load it, unlike the gallery images below.
+        photo ? el('img', { src: photo, alt: `Portrait of ${artist.name || 'the artist'}` }) : null,
       ]),
       el('div', {}, [
         el('h1', { text: artist.name || 'Untitled artist' }),
@@ -71,7 +75,7 @@ async function loadArtist() {
 
 function showNotFound(root, message) {
   clearChildren(root);
-  root.appendChild(el('div', { className: 'empty-note' }, [
+  root.appendChild(el('div', { className: 'empty-note fade-in' }, [
     el('p', { text: message }),
     el('a', { href: 'artists.html', className: 'btn btn-outline', text: 'Back to all artists' }),
   ]));
@@ -91,7 +95,7 @@ async function loadArtistGallery(artistId) {
     if (error) throw error;
     clearChildren(grid);
     if (!data || !data.length) {
-      grid.appendChild(el('p', { className: 'empty-note', text: "This artist's gallery is coming soon." }));
+      grid.appendChild(el('p', { className: 'empty-note fade-in', text: "This artist's gallery is coming soon." }));
       return;
     }
     data.forEach((item) => grid.appendChild(buildGalleryTile(item)));
